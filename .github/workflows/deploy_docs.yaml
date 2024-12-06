@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - v0.7.0
 permissions:
   contents: write
 jobs:
@@ -24,4 +25,9 @@ jobs:
           git config --global user.name "Docs Deploy"
           git config --global user.email "docs.deploy@example.co.uk"
       - name: Build Docs Website
-        run: mike deploy --push develop
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/v0.7" ]; then
+            mike deploy --push 0.7
+          else
+            mike deploy --push 1.0 latest
+          fi
